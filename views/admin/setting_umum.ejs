@@ -1,0 +1,107 @@
+<%- include('../partials/admin_header') %>
+
+<%- include('../partials/admin_navbar') %>
+<%- include('../partials/admin_sidebar') %>
+
+<div class="content-wrapper">
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6"><h1>General Settings</h1></div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="/staff/Admin">Home</a></li>
+                        <li class="breadcrumb-item active">General Settings</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="content">
+        <div class="container-fluid">
+            <% if (successMsg) { %>
+                <div class="alert alert-success" role="alert"><%= successMsg %></div>
+            <% } %>
+
+            <form action="/staff/Admin/setting_umum" method="POST">
+                <div class="row">
+                    <!-- General Details Card -->
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title">Business & Application Identity</h3>
+                            </div>
+                            <div class="card-body">
+                                <div class="form-group">
+                                    <label for="nama_hosting">Company / Hosting Name</label>
+                                    <input type="text" class="form-control" id="nama_hosting" name="nama_hosting" value="<%= settings.nama_hosting %>" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="judul_hosting">Application Title</label>
+                                    <input type="text" class="form-control" id="judul_hosting" name="judul_hosting" value="<%= settings.judul_hosting %>" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="email_hosting">Support Email Address</label>
+                                    <input type="email" class="form-control" id="email_hosting" name="email_hosting" value="<%= settings.email_hosting %>">
+                                </div>
+                                <div class="form-group">
+                                    <label for="telp_hosting">Contact Telephone</label>
+                                    <input type="text" class="form-control" id="telp_hosting" name="telp_hosting" value="<%= settings.telp_hosting %>">
+                                </div>
+                                <div class="form-group">
+                                    <label for="tos">TOS / Agreement URL Link</label>
+                                    <input type="text" class="form-control" id="tos" name="tos" value="<%= settings.tos %>">
+                                </div>
+                                <div class="form-group">
+                                    <label for="alamat_hosting">Business Address</label>
+                                    <textarea class="form-control" id="alamat_hosting" name="alamat_hosting" rows="3"><%= settings.alamat_hosting %></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Financial & Bank Parameters Card -->
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title">Billing & Bank Credentials</h3>
+                            </div>
+                            <div class="card-body">
+                                <div class="form-group">
+                                    <label for="tax">Tax Rates (%)</label>
+                                    <input type="number" class="form-control" id="tax" name="tax" value="<%= settings.tax %>" min="0" max="100">
+                                </div>
+                                <div class="form-group">
+                                    <label for="limit_email">Support Ticket Mail Limit</label>
+                                    <input type="number" class="form-control" id="limit_email" name="limit_email" value="<%= settings.limit_email %>" min="1">
+                                </div>
+                                <div class="form-group">
+                                    <label for="prefix">Invoice Start Prefix Number</label>
+                                    <input type="number" class="form-control" id="prefix" name="prefix" value="<%= settings.prefix %>" min="100">
+                                </div>
+                                <div class="form-group">
+                                    <label for="nama_bank">Bank Institution Name</label>
+                                    <input type="text" class="form-control" id="nama_bank" name="nama_bank" value="<%= settings.nama_bank || '' %>" placeholder="e.g. Bank Central Asia (BCA)">
+                                </div>
+                                <div class="form-group">
+                                    <label for="no_rekening">Bank Account Number</label>
+                                    <input type="text" class="form-control" id="no_rekening" name="no_rekening" value="<%= settings.no_rekening || '' %>" placeholder="e.g. 82138942">
+                                </div>
+                                <div class="form-group">
+                                    <label for="nama_pemilik">Account Owner Name</label>
+                                    <input type="text" class="form-control" id="nama_pemilik" name="nama_pemilik" value="<%= settings.nama_pemilik || '' %>" placeholder="e.g. John Doe">
+                                </div>
+                            </div>
+                            <div class="card-footer text-right">
+                                <button type="submit" class="btn btn-primary">Save Changes</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </section>
+</div>
+
+<%- include('../partials/admin_footer') %>

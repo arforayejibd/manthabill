@@ -1,7 +1,7 @@
 import crypto from 'crypto';
 
 const ALGORITHM = 'aes-256-cbc';
-const KEY = crypto.createHash('sha256').update(process.env.APP_KEY || 'manthabill-fallback-secret-key-salt').digest();
+const KEY = crypto.createHash('sha256').update(process.env.APP_KEY || 'onehostbilling-fallback-secret-key-salt').digest();
 const IV_LENGTH = 16;
 
 export function encrypt(text) {

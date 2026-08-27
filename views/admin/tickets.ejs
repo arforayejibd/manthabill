@@ -1,0 +1,72 @@
+<%- include('../partials/admin_header') %>
+
+<%- include('../partials/admin_navbar') %>
+<%- include('../partials/admin_sidebar') %>
+
+<div class="content-wrapper">
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6"><h1>Inbox</h1></div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="/staff/Admin">Home</a></li>
+                        <li class="breadcrumb-item active">Inbox</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="content">
+        <div class="container-fluid">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Support Tickets Inbox</h3>
+                </div>
+                <div class="card-body p-0">
+                    <table class="table table-hover table-striped mb-0">
+                        <thead>
+                            <tr>
+                                <th>Client ID</th>
+                                <th>Subject</th>
+                                <th>Last Message Date</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% if (tickets && tickets.length > 0) { %>
+                                <% tickets.forEach(function(ticket) { %>
+                                    <% 
+                                      const tDate = new Date(ticket.time * 1000);
+                                      const td = String(tDate.getDate()).padStart(2, '0');
+                                      const tm = String(tDate.getMonth() + 1).padStart(2, '0');
+                                      const ty = tDate.getFullYear();
+                                    %>
+                                    <tr>
+                                        <td>#<%= ticket.tbuser ? ticket.tbuser.client : '—' %></td>
+                                        <td><strong><%= ticket.judul %></strong></td>
+                                        <td><%= `${td}-${tm}-${ty}` %></td>
+                                        <td>
+                                            <% if (ticket.status_inbox === 1) { %>
+                                                <span class="badge badge-success">Open</span>
+                                            <% } else if (ticket.status_inbox === 2) { %>
+                                                <span class="badge badge-warning">Waiting Staff</span>
+                                            <% } else { %>
+                                                <span class="badge badge-secondary">Closed</span>
+                                            <% } %>
+                                        </td>
+                                    </tr>
+                                <% }); %>
+                            <% } else { %>
+                                <tr><td colspan="4" class="text-center py-4 text-muted">No support tickets found in inbox.</td></tr>
+                            <% } %>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+<%- include('../partials/admin_footer') %>

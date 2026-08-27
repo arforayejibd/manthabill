@@ -1,0 +1,70 @@
+<%- include('../partials/admin_header') %>
+
+<%- include('../partials/admin_navbar') %>
+<%- include('../partials/admin_sidebar') %>
+
+<div class="content-wrapper">
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6"><h1>Domain Accounts</h1></div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="/staff/Admin">Home</a></li>
+                        <li class="breadcrumb-item active">Domains</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="content">
+        <div class="container-fluid">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Custom Domain Registry</h3>
+                </div>
+                <div class="card-body p-0">
+                    <table class="table table-hover table-striped mb-0">
+                        <thead>
+                            <tr>
+                                <th>Client ID</th>
+                                <th>Domain Name</th>
+                                <th>TLD</th>
+                                <th>Period (Yrs)</th>
+                                <th>Amount</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% if (domains && domains.length > 0) { %>
+                                <% domains.forEach(function(domain) { %>
+                                    <tr>
+                                        <td>#<%= domain.tbuser ? domain.tbuser.client : '—' %></td>
+                                        <td><strong><%= domain.nama_domain %></strong></td>
+                                        <td><%= domain.tlds ? domain.tlds.tld : '—' %></td>
+                                        <td><%= domain.jangka_waktu %></td>
+                                        <td>$<%= parseFloat(domain.harga).toFixed(2) %></td>
+                                        <td>
+                                            <% if (domain.status_domain === 1) { %>
+                                                <span class="badge badge-success">Active</span>
+                                            <% } else if (domain.status_domain === 2) { %>
+                                                <span class="badge badge-warning">Pending</span>
+                                            <% } else { %>
+                                                <span class="badge badge-danger">Expired</span>
+                                            <% } %>
+                                        </td>
+                                    </tr>
+                                <% }); %>
+                            <% } else { %>
+                                <tr><td colspan="6" class="text-center py-4 text-muted">No domain account records found.</td></tr>
+                            <% } %>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+<%- include('../partials/admin_footer') %>

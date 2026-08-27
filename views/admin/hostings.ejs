@@ -1,0 +1,68 @@
+<%- include('../partials/admin_header') %>
+
+<%- include('../partials/admin_navbar') %>
+<%- include('../partials/admin_sidebar') %>
+
+<div class="content-wrapper">
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6"><h1>Shared Hosting Accounts</h1></div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="/staff/Admin">Home</a></li>
+                        <li class="breadcrumb-item active">Hosting Accounts</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="content">
+        <div class="container-fluid">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Shared Hosting Accounts Registry</h3>
+                </div>
+                <div class="card-body p-0">
+                    <table class="table table-hover table-striped mb-0">
+                        <thead>
+                            <tr>
+                                <th>Client ID</th>
+                                <th>Domain</th>
+                                <th>Product Package</th>
+                                <th>IP Address</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% if (hostings && hostings.length > 0) { %>
+                                <% hostings.forEach(function(hosting) { %>
+                                    <tr>
+                                        <td>#<%= hosting.tbuser ? hosting.tbuser.client : '—' %></td>
+                                        <td><strong><%= hosting.domain %></strong></td>
+                                        <td><%= hosting.products ? hosting.products.nama_product : 'Custom Plan' %></td>
+                                        <td><%= hosting.ip || '—' %></td>
+                                        <td>
+                                            <% if (hosting.status_hosting === 1) { %>
+                                                <span class="badge badge-success">Active</span>
+                                            <% } else if (hosting.status_hosting === 2) { %>
+                                                <span class="badge badge-warning">Suspended</span>
+                                            <% } else { %>
+                                                <span class="badge badge-danger">Terminated</span>
+                                            <% } %>
+                                        </td>
+                                    </tr>
+                                <% }); %>
+                            <% } else { %>
+                                <tr><td colspan="5" class="text-center py-4 text-muted">No shared hosting account records found.</td></tr>
+                            <% } %>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+<%- include('../partials/admin_footer') %>

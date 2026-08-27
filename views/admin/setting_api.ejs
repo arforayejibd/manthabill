@@ -1,0 +1,57 @@
+<%- include('../partials/admin_header') %>
+
+<%- include('../partials/admin_navbar') %>
+<%- include('../partials/admin_sidebar') %>
+
+<div class="content-wrapper">
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6"><h1>API Configuration</h1></div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="/staff/Admin">Home</a></li>
+                        <li class="breadcrumb-item active">API Settings</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="content">
+        <div class="container-fluid">
+            <% if (successMsg) { %>
+                <div class="alert alert-success" role="alert"><%= successMsg %></div>
+            <% } %>
+
+            <div class="row">
+                <div class="col-md-8 offset-md-2">
+                    <form action="/staff/Admin/setting_api" method="POST">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title">SMTP Mailer Service API</h3>
+                            </div>
+                            <div class="card-body">
+                                <p class="text-muted">
+                                    SMTP2Go serves as the mail transmission utility for automated billing notifications, invoice creation notices, and payment confirmation status changes.
+                                </p>
+                                <div class="form-group mt-3">
+                                    <label for="api_key">SMTP2Go API Key Credentials</label>
+                                    <input type="text" class="form-control" id="api_key" name="api_key" value="<%= settings.api_key %>" placeholder="Enter SMTP2Go API secret credential key..." required>
+                                    <small class="form-text text-muted mt-1">
+                                        For detailed instructions, refer to SMTP2Go Developer Console logs.
+                                    </small>
+                                </div>
+                            </div>
+                            <div class="card-footer text-right">
+                                <button type="submit" class="btn btn-primary">Update API Key</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+<%- include('../partials/admin_footer') %>

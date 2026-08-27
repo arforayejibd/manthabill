@@ -23,11 +23,14 @@ async function main() {
   // 2. Setting
   await prisma.tbsetting.upsert({
     where: { id_setting: 1 },
-    update: {},
+    update: {
+      nama_hosting: 'One HostBilling',
+      judul_hosting: 'One HostBilling - Billing System',
+    },
     create: {
       id_setting: 1,
-      nama_hosting: 'ManthaBill',
-      judul_hosting: 'ManthaBill - Billing System',
+      nama_hosting: 'One HostBilling',
+      judul_hosting: 'One HostBilling - Billing System',
       alamat_hosting: '',
       email_hosting: '',
       telp_hosting: '',

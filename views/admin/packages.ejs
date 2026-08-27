@@ -1,0 +1,66 @@
+<%- include('../partials/admin_header') %>
+
+<%- include('../partials/admin_navbar') %>
+<%- include('../partials/admin_sidebar') %>
+
+<div class="content-wrapper">
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6"><h1>Shared Hosting Packages</h1></div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="/staff/Admin">Home</a></li>
+                        <li class="breadcrumb-item active">Packages</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="content">
+        <div class="container-fluid">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Shared Hosting Products</h3>
+                </div>
+                <div class="card-body p-0">
+                    <table class="table table-hover table-striped mb-0">
+                        <thead>
+                            <tr>
+                                <th>Package Name</th>
+                                <th>Disk Capacity</th>
+                                <th>Bandwidth Limit</th>
+                                <th>Monthly Price</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% if (packages && packages.length > 0) { %>
+                                <% packages.forEach(function(pkg) { %>
+                                    <tr>
+                                        <td><strong><%= pkg.nama_product %></strong></td>
+                                        <td><%= pkg.kapasitas %></td>
+                                        <td><%= pkg.bandwith || 'Unlimited' %></td>
+                                        <td>$<%= parseFloat(pkg.harga).toFixed(2) %></td>
+                                        <td>
+                                            <% if (pkg.type_product === 1) { %>
+                                                <span class="badge badge-success">Active</span>
+                                            <% } else { %>
+                                                <span class="badge badge-danger">Inactive</span>
+                                            <% } %>
+                                        </td>
+                                    </tr>
+                                <% }); %>
+                            <% } else { %>
+                                <tr><td colspan="5" class="text-center py-4 text-muted">No packages registered yet.</td></tr>
+                            <% } %>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+<%- include('../partials/admin_footer') %>

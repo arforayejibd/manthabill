@@ -22,53 +22,64 @@
 
             <!-- KPI Cards -->
             <div class="row">
+                <!-- Clients -->
                 <div class="col-lg-3 col-6">
-                    <div class="small-box bg-info">
-                        <div class="inner">
-                            <h3><%= totalUsers %></h3>
-                            <p>Total Users</p>
+                    <a href="/staff/Admin/user" class="text-decoration-none">
+                        <div class="stat-card services">
+                            <div>
+                                <div class="info-box-number"><%= totalUsers %></div>
+                                <div class="info-box-text">Total Users</div>
+                            </div>
+                            <div class="icon">
+                                <i class="fas fa-users"></i>
+                            </div>
                         </div>
-                        <div class="icon"><i class="fas fa-users"></i></div>
-                        <a href="/staff/Admin/user" class="small-box-footer">
-                            More info <i class="fas fa-arrow-circle-right"></i>
-                        </a>
-                    </div>
+                    </a>
                 </div>
+
+                <!-- Active Services -->
                 <div class="col-lg-3 col-6">
-                    <div class="small-box bg-success">
-                        <div class="inner">
-                            <h3><%= jmlService %></h3>
-                            <p>Active Services</p>
+                    <a href="/staff/Admin/shared_hosting" class="text-decoration-none">
+                        <div class="stat-card domains">
+                            <div>
+                                <div class="info-box-number"><%= jmlService %></div>
+                                <div class="info-box-text">Active Services</div>
+                            </div>
+                            <div class="icon">
+                                <i class="fas fa-server"></i>
+                            </div>
                         </div>
-                        <div class="icon"><i class="fas fa-server"></i></div>
-                        <a href="/staff/Admin/shared_hosting" class="small-box-footer">
-                            More info <i class="fas fa-arrow-circle-right"></i>
-                        </a>
-                    </div>
+                    </a>
                 </div>
+
+                <!-- Total Invoices -->
                 <div class="col-lg-3 col-6">
-                    <div class="small-box bg-warning">
-                        <div class="inner">
-                            <h3><%= jmlInvoice %></h3>
-                            <p>Total Invoices</p>
+                    <a href="/staff/Admin/invoice" class="text-decoration-none">
+                        <div class="stat-card invoices">
+                            <div>
+                                <div class="info-box-number"><%= jmlInvoice %></div>
+                                <div class="info-box-text">Total Invoices</div>
+                            </div>
+                            <div class="icon">
+                                <i class="fas fa-credit-card"></i>
+                            </div>
                         </div>
-                        <div class="icon"><i class="fas fa-credit-card"></i></div>
-                        <a href="/staff/Admin/invoice" class="small-box-footer">
-                            More info <i class="fas fa-arrow-circle-right"></i>
-                        </a>
-                    </div>
+                    </a>
                 </div>
+
+                <!-- Pending Tickets -->
                 <div class="col-lg-3 col-6">
-                    <div class="small-box bg-danger">
-                        <div class="inner">
-                            <h3><%= jmlInbox %></h3>
-                            <p>Pending Tickets</p>
+                    <a href="/staff/Admin/inbox" class="text-decoration-none">
+                        <div class="stat-card tickets">
+                            <div>
+                                <div class="info-box-number"><%= jmlInbox %></div>
+                                <div class="info-box-text">Pending Tickets</div>
+                            </div>
+                            <div class="icon">
+                                <i class="fas fa-comments"></i>
+                            </div>
                         </div>
-                        <div class="icon"><i class="fas fa-comments"></i></div>
-                        <a href="/staff/Admin/inbox" class="small-box-footer">
-                            More info <i class="fas fa-arrow-circle-right"></i>
-                        </a>
-                    </div>
+                    </a>
                 </div>
             </div>
 

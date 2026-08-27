@@ -30,58 +30,62 @@
             <div class="row">
                 <!-- Services -->
                 <div class="col-lg-3 col-6">
-                    <div class="small-box bg-info">
-                        <div class="inner">
-                            <h3><%= hostingsCount %></h3>
-                            <p>SERVICES</p>
+                    <a href="/Service" class="text-decoration-none">
+                        <div class="stat-card services">
+                            <div>
+                                <div class="info-box-number"><%= hostingsCount %></div>
+                                <div class="info-box-text">Services</div>
+                            </div>
+                            <div class="icon">
+                                <i class="fas fa-server"></i>
+                            </div>
                         </div>
-                        <div class="icon">
-                            <i class="ion ion-social-buffer"></i>
-                        </div>
-                        <a href="/Service" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
-                    </div>
+                    </a>
                 </div>
 
                 <!-- Domain -->
                 <div class="col-lg-3 col-6">
-                    <div class="small-box bg-success">
-                        <div class="inner">
-                            <h3><%= domainsCount %></h3>
-                            <p>DOMAINS</p>
+                    <a href="/Domain" class="text-decoration-none">
+                        <div class="stat-card domains">
+                            <div>
+                                <div class="info-box-number"><%= domainsCount %></div>
+                                <div class="info-box-text">Domains</div>
+                            </div>
+                            <div class="icon">
+                                <i class="fas fa-globe"></i>
+                            </div>
                         </div>
-                        <div class="icon">
-                            <i class="ion ion-earth"></i>
-                        </div>
-                        <a href="/Domain" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
-                    </div>
+                    </a>
                 </div>
 
                 <!-- Invoice -->
                 <div class="col-lg-3 col-6">
-                    <div class="small-box bg-warning">
-                        <div class="inner">
-                            <h3><%= invoicesCount %></h3>
-                            <p>INVOICES</p>
+                    <a href="/Invoice" class="text-decoration-none">
+                        <div class="stat-card invoices">
+                            <div>
+                                <div class="info-box-number"><%= invoicesCount %></div>
+                                <div class="info-box-text">Invoices</div>
+                            </div>
+                            <div class="icon">
+                                <i class="fas fa-credit-card"></i>
+                            </div>
                         </div>
-                        <div class="icon">
-                            <i class="ion ion-card"></i>
-                        </div>
-                        <a href="/Invoice" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
-                    </div>
+                    </a>
                 </div>
 
                 <!-- Ticket Support -->
                 <div class="col-lg-3 col-6">
-                    <div class="small-box bg-danger">
-                        <div class="inner">
-                            <h3><%= ticketsCount %></h3>
-                            <p>SUPPORT TICKETS</p>
+                    <a href="/Ticket" class="text-decoration-none">
+                        <div class="stat-card tickets">
+                            <div>
+                                <div class="info-box-number"><%= ticketsCount %></div>
+                                <div class="info-box-text">Support Tickets</div>
+                            </div>
+                            <div class="icon">
+                                <i class="fas fa-comments"></i>
+                            </div>
                         </div>
-                        <div class="icon">
-                            <i class="ion ion-chatbubbles"></i>
-                        </div>
-                        <a href="/Ticket" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
-                    </div>
+                    </a>
                 </div>
             </div>
             <!-- /End Stat Boxes -->

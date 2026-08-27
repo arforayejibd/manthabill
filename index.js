@@ -24,7 +24,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // Session
 app.use(session({
-  secret: process.env.SESSION_SECRET || 'manthabill-secret-session-key',
+  secret: process.env.SESSION_SECRET || 'onehostbilling-secret-session-key',
   resave: false,
   saveUninitialized: false,
   cookie: {
@@ -58,13 +58,13 @@ app.use(async (req, res, next) => {
   try {
     const setting = await prisma.tbsetting.findUnique({ where: { id_setting: 1 } });
     res.locals.setting = setting || {
-      nama_hosting: 'ManthaBill',
-      judul_hosting: 'ManthaBill - Billing System'
+      nama_hosting: 'One HostBilling',
+      judul_hosting: 'One HostBilling - Billing System'
     };
   } catch (err) {
     res.locals.setting = {
-      nama_hosting: 'ManthaBill',
-      judul_hosting: 'ManthaBill - Billing System'
+      nama_hosting: 'One HostBilling',
+      judul_hosting: 'One HostBilling - Billing System'
     };
   }
 

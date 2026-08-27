@@ -1,0 +1,75 @@
+<%- include('../partials/admin_header') %>
+
+<%- include('../partials/admin_navbar') %>
+<%- include('../partials/admin_sidebar') %>
+
+<div class="content-wrapper">
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6"><h1>Clients</h1></div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="/staff/Admin">Home</a></li>
+                        <li class="breadcrumb-item active">Clients</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="content">
+        <div class="container-fluid">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Registered Clients Registry</h3>
+                </div>
+                <div class="card-body p-0">
+                    <table class="table table-hover table-striped mb-0">
+                        <thead>
+                            <tr>
+                                <th>Client ID</th>
+                                <th>Full Name</th>
+                                <th>Email Address</th>
+                                <th>Created Date</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% if (clients && clients.length > 0) { %>
+                                <% clients.forEach(function(client) { %>
+                                    <% 
+                                      const detail = client.tbdetailuser && client.tbdetailuser[0] ? client.tbdetailuser[0] : {};
+                                      const fullName = `${detail.nama_depan || ''} ${detail.nama_belakang || ''}`.trim() || 'No Profile Data';
+                                      
+                                      const cDate = new Date(client.date_create);
+                                      const cd = String(cDate.getDate()).padStart(2, '0');
+                                      const cm = String(cDate.getMonth() + 1).padStart(2, '0');
+                                      const cy = cDate.getFullYear();
+                                    %>
+                                    <tr>
+                                        <td>#<%= client.client %></td>
+                                        <td><strong><%= fullName %></strong></td>
+                                        <td><%= client.email %></td>
+                                        <td><%= `${cd}-${cm}-${cy}` %></td>
+                                        <td>
+                                            <% if (client.status === 1) { %>
+                                                <span class="badge badge-success">Active</span>
+                                            <% } else { %>
+                                                <span class="badge badge-danger">Suspended</span>
+                                            <% } %>
+                                        </td>
+                                    </tr>
+                                <% }); %>
+                            <% } else { %>
+                                <tr><td colspan="5" class="text-center py-4 text-muted">No client records found.</td></tr>
+                            <% } %>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+<%- include('../partials/admin_footer') %>
