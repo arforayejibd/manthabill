@@ -1,0 +1,116 @@
+<%- include('../partials/user_header') %>
+
+<%- include('../partials/user_navbar') %>
+<%- include('../partials/user_sidebar') %>
+
+<div class="content-wrapper">
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1>Hosting Details</h1>
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="/Member">Home</a></li>
+                        <li class="breadcrumb-item"><a href="/Service">Services</a></li>
+                        <li class="breadcrumb-item active">Detail</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="content">
+        <div class="container-fluid">
+
+            <% if (pesan) { %>
+                <%- pesan %>
+            <% } %>
+
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="card card-info">
+                        <div class="card-header">
+                            <h3 class="card-title">Service Information</h3>
+                        </div>
+                        <div class="card-body p-0">
+                            <table class="table table-striped mb-0">
+                                <tbody>
+                                    <tr>
+                                        <td style="width: 35%;"><strong>Product Name</strong></td>
+                                        <td><%= hosting.nama_hosting %></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Domain</strong></td>
+                                        <td><%= hosting.domain %></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Price</strong></td>
+                                        <td>Rp <%= Number(hosting.harga).toLocaleString('id-ID') %>,-</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Start Date</strong></td>
+                                        <td>
+                                            <% 
+                                              const startDate = new Date(hosting.start_hosting);
+                                              const sd = String(startDate.getDate()).padStart(2, '0');
+                                              const sm = String(startDate.getMonth() + 1).padStart(2, '0');
+                                              const sy = startDate.getFullYear();
+                                            %>
+                                            <%= `${sd}-${sm}-${sy}` %>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Expiry Date</strong></td>
+                                        <td>
+                                            <% 
+                                              const endDate = new Date(hosting.end_hosting);
+                                              const ed = String(endDate.getDate()).padStart(2, '0');
+                                              const em = String(endDate.getMonth() + 1).padStart(2, '0');
+                                              const ey = endDate.getFullYear();
+                                            %>
+                                            <%= `${ed}-${em}-${ey}` %>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Status</strong></td>
+                                        <td>
+                                            <% if (hosting.status_hosting === 1) { %>
+                                                <small class="badge badge-success">ACTIVE</small>
+                                            <% } else if (hosting.status_hosting === 2) { %>
+                                                <small class="badge badge-warning">PENDING</small>
+                                            <% } else if (hosting.status_hosting === 3) { %>
+                                                <small class="badge badge-danger">SUSPENDED</small>
+                                            <% } else { %>
+                                                <small class="badge badge-secondary">TERMINATED</small>
+                                            <% } %>
+                                        </td>
+                                    </tr>
+                                    <% if (hosting.status_hosting === 1 && hosting.user_cpanel) { %>
+                                    <tr>
+                                        <td><strong>cPanel Login</strong></td>
+                                        <td>
+                                            <a href="http://<%= hosting.domain %>:2083" target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-success">
+                                                <i class="fas fa-external-link-alt"></i> Login to cPanel
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    <% } %>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="card-footer">
+                            <a href="/Service" class="btn btn-secondary">
+                                <i class="fas fa-arrow-left"></i> Back
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+</div>
+
+<%- include('../partials/user_footer') %>

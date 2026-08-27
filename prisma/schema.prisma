@@ -1,0 +1,426 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model cache {
+  key        String @id @db.VarChar(255)
+  value      String @db.MediumText
+  expiration Int
+
+  @@index([expiration], map: "cache_expiration_index")
+}
+
+model cache_locks {
+  key        String @id @db.VarChar(255)
+  owner      String @db.VarChar(255)
+  expiration Int
+
+  @@index([expiration], map: "cache_locks_expiration_index")
+}
+
+model category_configs {
+  id             Int              @id @default(autoincrement())
+  name           String           @db.VarChar(50)
+  config_options config_options[]
+}
+
+model config_options {
+  id               Int              @id @default(autoincrement())
+  id_vps           Int
+  id_category      Int
+  name_config      String           @db.VarChar(50)
+  detail_config    String           @db.VarChar(30)
+  harga_config     Decimal          @db.Decimal(15, 2)
+  category_configs category_configs @relation(fields: [id_category], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_config_options_category")
+  vps              vps              @relation(fields: [id_vps], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_config_options_vps")
+
+  @@index([id_category], map: "fk_config_options_category")
+  @@index([id_vps], map: "fk_config_options_vps")
+}
+
+model domain_transits {
+  id          Int    @id @default(autoincrement())
+  user_id     Int
+  id_tld      Int
+  nama_domain String @db.VarChar(50)
+  tlds        tlds   @relation(fields: [id_tld], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "fk_domain_transits_tld")
+  tbuser      tbuser @relation(fields: [user_id], references: [id_user], onDelete: Cascade, onUpdate: NoAction, map: "fk_domain_transits_user")
+
+  @@index([id_tld], map: "idx_domain_transits_tld_id")
+  @@index([user_id], map: "idx_domain_transits_user_id")
+}
+
+model domain_whois {
+  id            Int     @id @default(autoincrement())
+  id_domain     Int
+  nama_depan    String  @db.VarChar(30)
+  nama_belakang String  @db.VarChar(30)
+  nama_usaha    String  @db.VarChar(50)
+  no_telp       String  @db.VarChar(20)
+  email         String  @db.VarChar(50)
+  alamat1       String  @db.VarChar(100)
+  alamat2       String  @db.VarChar(100)
+  kota          String  @db.VarChar(20)
+  provinsi      String  @db.VarChar(30)
+  kodepos       Int
+  negara        String  @db.VarChar(30)
+  domains       domains @relation(fields: [id_domain], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "fk_domain_whois_domain")
+
+  @@index([id_domain], map: "idx_domain_whois_id_domain")
+}
+
+model domains {
+  id            Int            @id @default(autoincrement())
+  user_id       Int
+  tld_id        Int
+  nama_domain   String         @db.VarChar(50)
+  nameserver1   String         @db.VarChar(30)
+  nameserver2   String         @db.VarChar(30)
+  nameserver3   String         @db.VarChar(30)
+  nameserver4   String         @db.VarChar(30)
+  nameserver5   String         @db.VarChar(30)
+  date_register DateTime       @db.Date
+  due_date      DateTime       @db.Date
+  status        Int
+  domain_whois  domain_whois[]
+  tlds          tlds           @relation(fields: [tld_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "fk_domains_tld")
+  tbuser        tbuser         @relation(fields: [user_id], references: [id_user], onDelete: Cascade, onUpdate: NoAction, map: "fk_domains_user")
+
+  @@index([tld_id], map: "idx_domains_tld_id")
+  @@index([user_id], map: "idx_domains_user_id")
+}
+
+model failed_jobs {
+  id         BigInt   @id @default(autoincrement()) @db.UnsignedBigInt
+  uuid       String   @unique(map: "failed_jobs_uuid_unique") @db.VarChar(255)
+  connection String   @db.Text
+  queue      String   @db.Text
+  payload    String   @db.LongText
+  exception  String   @db.LongText
+  failed_at  DateTime @default(now()) @db.Timestamp(0)
+}
+
+model hostings {
+  id             Int        @id @default(autoincrement())
+  id_product     Int?
+  user_id        Int
+  nama_hosting   String     @db.VarChar(100)
+  user_cpanel    String     @db.VarChar(10)
+  harga          Decimal    @db.Decimal(15, 2)
+  start_hosting  DateTime   @db.Date
+  end_hosting    DateTime   @db.Date
+  domain         String     @db.VarChar(50)
+  status_hosting Int
+  products       products?  @relation(fields: [id_product], references: [id], onUpdate: NoAction, map: "fk_hostings_product")
+  tbuser         tbuser     @relation(fields: [user_id], references: [id_user], onDelete: Cascade, onUpdate: NoAction, map: "fk_hostings_user")
+  invoices       invoices[]
+
+  @@index([user_id], map: "idx_hostings_user_id")
+  @@index([id_product], map: "idx_id_product")
+}
+
+model inbox_replies {
+  id        Int    @id @default(autoincrement())
+  is_admin  Int
+  key_token String @db.VarChar(100)
+  pesan     String @db.Text
+  time      Int
+}
+
+model inboxes {
+  id           Int    @id @default(autoincrement())
+  user_id      Int
+  is_adm       Int
+  judul        String @db.VarChar(80)
+  pesan        String @db.Text
+  key_token    String @db.VarChar(100)
+  time         Int
+  status_inbox Int
+  tbuser       tbuser @relation(fields: [user_id], references: [id_user], onDelete: Cascade, onUpdate: NoAction, map: "fk_inboxes_user")
+
+  @@index([user_id], map: "idx_inboxes_user_id")
+}
+
+model invoices {
+  id                    Int                     @id @default(autoincrement())
+  user_id               Int
+  id_hosting            Int?
+  no_invoice            String                  @db.VarChar(10)
+  detail_produk         String                  @db.VarChar(50)
+  due                   DateTime                @db.Date
+  inv_date              DateTime                @db.Date
+  sub_total             Decimal                 @db.Decimal(15, 2)
+  diskon_inv            Decimal                 @db.Decimal(15, 2)
+  pajak_inv             Decimal                 @db.Decimal(15, 2)
+  total_jumlah          Decimal                 @db.Decimal(15, 2)
+  status_inv            Int
+  token_inv             String                  @db.VarChar(100)
+  hostings              hostings?               @relation(fields: [id_hosting], references: [id], onUpdate: NoAction, map: "fk_invoices_hosting")
+  tbuser                tbuser                  @relation(fields: [user_id], references: [id_user], onDelete: Cascade, onUpdate: NoAction, map: "fk_invoices_user")
+  payment_confirmations payment_confirmations[]
+
+  @@index([id_hosting], map: "idx_invoices_id_hosting")
+  @@index([user_id], map: "idx_invoices_user_id")
+}
+
+model job_batches {
+  id             String  @id @db.VarChar(255)
+  name           String  @db.VarChar(255)
+  total_jobs     Int
+  pending_jobs   Int
+  failed_jobs    Int
+  failed_job_ids String  @db.LongText
+  options        String? @db.MediumText
+  cancelled_at   Int?
+  created_at     Int
+  finished_at    Int?
+}
+
+model jobs {
+  id           BigInt @id @default(autoincrement()) @db.UnsignedBigInt
+  queue        String @db.VarChar(255)
+  payload      String @db.LongText
+  attempts     Int    @db.UnsignedTinyInt
+  reserved_at  Int?   @db.UnsignedInt
+  available_at Int    @db.UnsignedInt
+  created_at   Int    @db.UnsignedInt
+
+  @@index([queue], map: "jobs_queue_index")
+}
+
+model lockeds {
+  id              Int    @id @default(autoincrement())
+  gagal_pertama   Int
+  ip              String @db.VarChar(50)
+  durasi_terkunci Int
+  status          Int
+  failed_count    Int
+}
+
+model mail_logs {
+  id           Int    @id @default(autoincrement())
+  email_tujuan String @db.VarChar(50)
+  waktukirim   String @db.VarChar(50)
+}
+
+model migrations {
+  id        Int    @id @default(autoincrement()) @db.UnsignedInt
+  migration String @db.VarChar(255)
+  batch     Int
+}
+
+model modules {
+  id         Int    @id @default(autoincrement())
+  nama_modul String @db.VarChar(50)
+  api_key    String @db.VarChar(100)
+  status     Int
+}
+
+model news {
+  id           Int      @id @default(autoincrement())
+  judul_berita String   @db.VarChar(100)
+  isi_berita   String   @db.Text
+  tgl_berita   DateTime @db.Date
+}
+
+model password_reset_tokens {
+  email      String    @id @db.VarChar(255)
+  token      String    @db.VarChar(255)
+  created_at DateTime? @db.Timestamp(0)
+}
+
+model payment_confirmations {
+  id                 Int      @id @default(autoincrement())
+  invoice_id         Int
+  user_id            Int
+  nama_pengirim      String   @db.VarChar(100)
+  bank_pengirim      String   @db.VarChar(50)
+  no_invoice         String   @db.VarChar(20)
+  tanggal_konfirmasi DateTime @db.Date
+  total_bayar        Decimal  @db.Decimal(15, 2)
+  status             Int
+  invoices           invoices @relation(fields: [invoice_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "fk_payment_conf_invoice")
+  tbuser             tbuser   @relation(fields: [user_id], references: [id_user], onDelete: Cascade, onUpdate: NoAction, map: "fk_payment_conf_user")
+
+  @@index([invoice_id], map: "idx_payment_conf_invoice_id")
+  @@index([user_id], map: "idx_payment_conf_user_id")
+}
+
+model products {
+  id               Int        @id @default(autoincrement())
+  nama_product     String     @db.VarChar(50)
+  type_product     Int
+  harga            Decimal    @db.Decimal(15, 2)
+  kapasitas        String     @db.VarChar(20)
+  bandwith         String?    @db.VarChar(20)
+  addon_domain     String?    @db.VarChar(20)
+  email_account    String?    @db.VarChar(20)
+  database_account String?    @db.VarChar(10)
+  ftp_account      String?    @db.VarChar(20)
+  siklus           Int?
+  pilihan_1        String?    @db.VarChar(20)
+  pilihan_2        String?    @db.VarChar(20)
+  pilihan_3        String?    @db.VarChar(20)
+  pilihan_4        String?    @db.VarChar(20)
+  hostings         hostings[]
+}
+
+model sessions {
+  id            String  @id @db.VarChar(255)
+  user_id       BigInt? @db.UnsignedBigInt
+  ip_address    String? @db.VarChar(45)
+  user_agent    String? @db.Text
+  payload       String  @db.LongText
+  last_activity Int
+
+  @@index([last_activity], map: "sessions_last_activity_index")
+  @@index([user_id], map: "sessions_user_id_index")
+}
+
+model tbadmin {
+  id_admin Int    @id @default(autoincrement())
+  username String @db.VarChar(10)
+  password String @db.VarChar(255)
+  level    Int
+  status   Int    @db.TinyInt
+}
+
+model tbdetailuser {
+  id_detail     Int     @id @default(autoincrement())
+  id_user       Int
+  nama_depan    String? @db.VarChar(20)
+  nama_belakang String? @db.VarChar(30)
+  nama_usaha    String? @db.VarChar(50)
+  alamat        String? @db.VarChar(200)
+  alamat2       String? @db.VarChar(200)
+  kota          String? @db.VarChar(30)
+  provinsi      String? @db.VarChar(50)
+  negara        String? @db.VarChar(30)
+  kodepos       String? @db.VarChar(10)
+  phone         String? @db.VarChar(30)
+  time_req      Int?
+  gambar        String? @db.VarChar(128)
+  tbuser        tbuser  @relation(fields: [id_user], references: [id_user], onDelete: Cascade, onUpdate: NoAction, map: "fk_detail_user")
+
+  @@index([id_user], map: "idx_id_user")
+}
+
+model tbemail {
+  id_email       Int    @id @default(autoincrement())
+  email_pengirim String @db.VarChar(50)
+  email_tujuan   String @db.VarChar(50)
+  subyek         String @db.VarChar(100)
+  email_pesan    String @db.Text
+  status         Int    @default(2)
+}
+
+model tbsetting {
+  id_setting     Int     @id @default(autoincrement())
+  nama_hosting   String  @db.VarChar(20)
+  judul_hosting  String  @db.VarChar(100)
+  alamat_hosting String  @db.VarChar(200)
+  email_hosting  String  @db.VarChar(50)
+  telp_hosting   String  @db.VarChar(30)
+  tos            String  @db.VarChar(100)
+  tax            Int     @default(0)
+  limit_email    Int     @default(10)
+  prefix         Int     @default(1000)
+  api_key        String  @default("") @db.VarChar(128)
+  nama_bank      String? @db.VarChar(80)
+  no_rekening    String? @db.VarChar(50)
+  nama_pemilik   String? @db.VarChar(80)
+}
+
+model tbtoken {
+  id_token Int    @id @default(autoincrement())
+  id_user  Int
+  token    String @db.VarChar(100)
+  time     Int
+}
+
+model tbuser {
+  id_user               Int                     @id @default(autoincrement())
+  client                Int
+  password              String                  @db.VarChar(255)
+  email                 String                  @db.VarChar(50)
+  date_create           DateTime                @db.Date
+  ip                    String?                 @db.VarChar(20)
+  status                Int
+  time_req              Int?
+  token_req             String?                 @db.VarChar(100)
+  validasi_token        String?                 @db.VarChar(100)
+  timepin               Int?
+  sec_pin               String?                 @db.VarChar(50)
+  domain_transits       domain_transits[]
+  domains               domains[]
+  hostings              hostings[]
+  inboxes               inboxes[]
+  invoices              invoices[]
+  payment_confirmations payment_confirmations[]
+  tbdetailuser          tbdetailuser[]
+  vps_transits          vps_transits[]
+}
+
+model tlds {
+  id              Int               @id @default(autoincrement())
+  tld             String            @db.VarChar(6)
+  harga_tld       Decimal           @db.Decimal(15, 2)
+  status_tld      Int
+  default         Int
+  domain_transits domain_transits[]
+  domains         domains[]
+}
+
+model users {
+  id                BigInt    @id @default(autoincrement()) @db.UnsignedBigInt
+  name              String    @db.VarChar(255)
+  email             String    @unique(map: "users_email_unique") @db.VarChar(255)
+  email_verified_at DateTime? @db.Timestamp(0)
+  password          String    @db.VarChar(255)
+  remember_token    String?   @db.VarChar(100)
+  created_at        DateTime? @db.Timestamp(0)
+  updated_at        DateTime? @db.Timestamp(0)
+}
+
+model vps {
+  id             Int              @id @default(autoincrement())
+  nama_vps       String           @db.VarChar(30)
+  harga_vps      Decimal          @db.Decimal(15, 2)
+  kapasitas_vps  String           @db.VarChar(30)
+  bandwith_vps   String           @db.VarChar(30)
+  core_vps       String           @db.VarChar(10)
+  ram_vps        String           @db.VarChar(30)
+  pilihan_1      String           @db.VarChar(20)
+  pilihan_2      String           @db.VarChar(20)
+  pilihan_3      String           @db.VarChar(20)
+  pilihan_4      String           @db.VarChar(20)
+  status         Int
+  config_options config_options[]
+  vps_services   vps_services[]
+}
+
+model vps_services {
+  id        Int     @id @default(autoincrement())
+  id_vps    Int
+  deskripsi String  @db.VarChar(50)
+  harga     Decimal @db.Decimal(15, 2)
+  vps       vps     @relation(fields: [id_vps], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "fk_vps_services_vps")
+
+  @@index([id_vps], map: "idx_id_vps")
+}
+
+model vps_transits {
+  id             Int    @id @default(autoincrement())
+  user_id        Int
+  timestamp      String @db.VarChar(50)
+  nama_variabel  String @db.VarChar(30)
+  nilai_variabel String @db.VarChar(50)
+  tbuser         tbuser @relation(fields: [user_id], references: [id_user], onDelete: Cascade, onUpdate: NoAction, map: "fk_vps_transits_user")
+
+  @@index([user_id], map: "idx_vps_transits_user_id")
+}

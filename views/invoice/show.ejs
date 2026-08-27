@@ -1,0 +1,266 @@
+<%- include('../partials/user_header') %>
+
+<%- include('../partials/user_navbar') %>
+<%- include('../partials/user_sidebar') %>
+
+<div class="content-wrapper">
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1><%= typeof bayarMode !== 'undefined' ? 'Payment Instructions' : 'Invoice Details' %></h1>
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="/Member">Home</a></li>
+                        <li class="breadcrumb-item"><a href="/Invoice">Invoice</a></li>
+                        <li class="breadcrumb-item active"><%= typeof bayarMode !== 'undefined' ? 'Payment' : 'Details' %></li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="content">
+        <div class="container-fluid">
+
+            <% if (typeof bayarMode !== 'undefined') { %>
+            <!-- Payment instructions mode -->
+            <div class="row">
+                <div class="col-lg-12 col-md-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <h3>Thank you for ordering at <%= setting.nama_hosting || 'ManthaBill' %></h3>
+                            <p>Follow the payment instructions below to activate your service faster.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-6 col-md-6">
+                    <div class="card card-olive">
+                        <div class="card-body">
+                            <h3>Invoice Details</h3>
+                            <hr>
+                            <dl>
+                                <dt>INVOICE: #<%= invoice.no_invoice.toUpperCase() %></dt>
+                                <dd>Total Amount: Rp <%= Number(invoice.total_jumlah).toLocaleString('id-ID') %>,- </dd>
+                                <dd>Product Name: <%= invoice.detail_produk %></dd>
+                                <div class="callout callout-danger mt-5">
+                                    <dt>PAYMENT MEMO / REFERENCE</dt>
+                                    <dd>
+                                        <p class="font-weight-bold">INV <%= invoice.no_invoice.toUpperCase() %></p>
+                                        <i>
+                                            <small>
+                                                <p>*Please enter the reference code above when making a bank transfer, ATM transfer, or Internet banking transaction.</p>
+                                            </small>
+                                        </i>
+                                    </dd>
+                                </div>
+                                <dt>Bank Account Details</dt>
+                                <dd>
+                                    Bank Name: <%= setting.nama_bank || '-' %><br>
+                                    Account No: <%= setting.no_rekening || '-' %><br>
+                                    Account Holder: <%= setting.nama_pemilik || '-' %>
+                                </dd>
+                            </dl>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-6 col-md-6">
+                    <div class="alert alert-dark">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <h3>Confirm Your Payment</h3>
+                                <p>Once you have completed the bank transfer, please confirm using one of these options:</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <ul>
+                                    <li>
+                                        <dl>
+                                            <dt>Online Confirmation Form</dt>
+                                            <dd>
+                                                Click <a href="/Invoice/konfirmasi/<%= encrypt(invoice.id) %>" class="btn btn-sm btn-warning">CONFIRM NOW</a> to fill out the payment confirmation form.
+                                            </dd>
+                                        </dl>
+                                    </li>
+                                    <li>
+                                        <dl>
+                                            <dt>SMS Confirmation</dt>
+                                            <dd>Send an SMS to <%= setting.telp_hosting || '' %> with this format:</dd>
+                                            <dd>
+                                                <b>PAY</b> [space] <b>INV</b> [space]
+                                                <b><%= invoice.no_invoice.toUpperCase() %></b> [space]
+                                                <b><%= Number(invoice.total_jumlah).toLocaleString('id-ID') %></b> [space]
+                                                <b>[Sender Name]</b>
+                                            </dd>
+                                        </dl>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="alert alert-info">
+                                    <p>**Please transfer the exact amount listed to help our team verify your payment automatically.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <a href="/Invoice" class="btn btn-warning btn-lg">
+                                    <i class="fas fa-address-card"></i> Invoices List
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <% } else { %>
+            <!-- Invoice details print/view mode -->
+            <div class="invoice p-3 mb-3">
+                <div class="row">
+                    <div class="col-12">
+                        <h4>
+                            <i class="fas fa-globe"></i> <%= setting.judul_hosting || '' %>
+                            <small class="float-right">
+                                Date: 
+                                <% 
+                                  const invDate = new Date(invoice.inv_date);
+                                  const id = String(invDate.getDate()).padStart(2, '0');
+                                  const im = String(invDate.getMonth() + 1).padStart(2, '0');
+                                  const iy = invDate.getFullYear();
+                                %>
+                                <%= `${id}-${im}-${iy}` %>
+                            </small>
+                        </h4>
+                    </div>
+                </div>
+
+                <div class="row invoice-info">
+                    <div class="col-sm-4 invoice-col">
+                        Bill To:
+                        <address>
+                            <% 
+                              const detail = invoice.user ? invoice.user.tbdetailuser[0] : null; 
+                              const namaDepan = detail ? detail.nama_depan : '';
+                              const namaBelakang = detail ? detail.nama_belakang : '';
+                              const alamat1 = detail ? detail.alamat : '';
+                              const alamat2 = detail ? detail.alamat2 : '';
+                              const kota = detail ? detail.kota : '';
+                              const provinsi = detail ? detail.provinsi : '';
+                              const negara = detail ? detail.negara : '';
+                              const phone = detail ? detail.phone : '';
+                              const email = invoice.user ? invoice.user.email : '';
+                            %>
+                            <strong><%= (namaDepan || namaBelakang) ? (namaDepan + ' ' + namaBelakang).trim() : 'Member' %></strong><br>
+                            <% if (alamat1) { %> <%= alamat1 %><br> <% } %>
+                            <% if (alamat2) { %> <%= alamat2 %><br> <% } %>
+                            <% if (kota || provinsi) { %> <%= [kota, provinsi].filter(Boolean).join(', ') %><br> <% } %>
+                            <% if (negara) { %> <%= negara %>.<br> <% } %>
+                            <% if (phone) { %> Phone: <%= phone %><br> <% } %>
+                            <% if (email) { %> Email: <%= email %><br> <% } %>
+                        </address>
+                    </div>
+
+                    <div class="col-md-4 offset-md-4 invoice-col">
+                        <b>Invoice #<%= invoice.no_invoice.toUpperCase() %></b><br>
+                        <br>
+                        <b>Invoice Date:</b> <%= `${id}-${im}-${iy}` %><br>
+                        <b>Due Date:</b> 
+                        <% 
+                          const due = new Date(invoice.due);
+                          const dd = String(due.getDate()).padStart(2, '0');
+                          const dm = String(due.getMonth() + 1).padStart(2, '0');
+                          const dy = due.getFullYear();
+                        %>
+                        <%= `${dd}-${dm}-${dy}` %><br>
+                        <b>Status:</b>
+                        <% if (invoice.status_inv === 1) { %>
+                            <small class="badge badge-primary">PAID</small>
+                        <% } else if (invoice.status_inv === 2) { %>
+                            <small class="badge badge-warning">UNPAID / PENDING</small>
+                        <% } else if (invoice.status_inv === 3) { %>
+                            <small class="badge badge-info">UNDER REVIEW</small>
+                        <% } else { %>
+                            <small class="badge badge-danger">VOID</small>
+                        <% } %>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-12 table-responsive">
+                        <table class="table table-success table-striped table-bordered">
+                            <thead>
+                                <tr>
+                                    <th width="80%">Description</th>
+                                    <th class="text-center" width="20%">Amount</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><%= invoice.detail_produk %></td>
+                                    <td class="text-center">Rp <%= Number(invoice.sub_total).toLocaleString('id-ID') %>,-</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-6">
+                        <p class="lead font-weight-bold">Payment Method:</p>
+                        <p>BANK TRANSFER</p>
+                        <p class="text-muted well well-sm shadow-none" style="margin-top: 10px;">
+                            Bank Name: <%= setting.nama_bank || '-' %><br>
+                            Account No: <%= setting.no_rekening || '-' %><br>
+                            Account Holder: <%= setting.nama_pemilik || '-' %>
+                        </p>
+                    </div>
+
+                    <div class="col-6">
+                        <div class="table-responsive">
+                            <table class="table">
+                                <tr>
+                                    <th>Subtotal:</th>
+                                    <td>Rp <%= Number(invoice.sub_total).toLocaleString('id-ID') %>,-</td>
+                                </tr>
+                                <tr>
+                                    <th>Discount:</th>
+                                    <td>Rp <%= Number(invoice.diskon_inv).toLocaleString('id-ID') %>,-</td>
+                                </tr>
+                                <tr>
+                                    <th>Total:</th>
+                                    <td>Rp <%= Number(invoice.total_jumlah).toLocaleString('id-ID') %>,-</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row no-print">
+                    <div class="col-12">
+                        <button onclick="window.print()" class="btn btn-default">
+                            <i class="fas fa-print"></i> Print
+                        </button>
+                        <% if (invoice.status_inv === 2) { %>
+                            <a href="/Invoice/bayar/<%= encrypt(invoice.id) %>" class="btn btn-success float-right">
+                                <i class="far fa-credit-card"></i> PAY NOW
+                            </a>
+                        <% } %>
+                        <a href="/Invoice" class="btn btn-danger float-right" style="margin-right: 5px;">
+                            <i class="fas fa-chevron-circle-left"></i> Back
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <% } %>
+
+        </div>
+    </section>
+</div>
+
+<%- include('../partials/user_footer') %>

@@ -1,0 +1,157 @@
+<%- include('../partials/user_header') %>
+
+<%- include('../partials/user_navbar') %>
+<%- include('../partials/user_sidebar') %>
+
+<div class="content-wrapper">
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1>Domains</h1>
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="/Member">Home</a></li>
+                        <li class="breadcrumb-item active">Domains</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="content">
+        <div class="container-fluid">
+
+            <% if (pesan) { %>
+                <%- pesan %>
+            <% } %>
+
+            <!-- TLD Pricing Table -->
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card card-info">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <h3 class="card-title">Domain Pricing</h3>
+                            <a href="/Domain/beli" class="btn btn-sm btn-primary float-right">
+                                <i class="fas fa-plus"></i> Buy Domain
+                            </a>
+                        </div>
+                        <div class="card-body">
+                            <table id="tabelTld" class="table table-bordered table-hover">
+                                <thead>
+                                    <tr>
+                                        <th class="text-center">No</th>
+                                        <th class="text-center">Extension</th>
+                                        <th class="text-center">Registration Price</th>
+                                        <th class="text-center">Status</th>
+                                        <th class="text-center">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <% if (tldList && tldList.length > 0) { %>
+                                        <% tldList.forEach(function(tld, i) { %>
+                                            <tr>
+                                                <td class="text-center"><%= i + 1 %></td>
+                                                <td class="text-center">
+                                                    <strong>.<%= tld.tld.toUpperCase() %></strong>
+                                                </td>
+                                                <td class="text-center">
+                                                    Rp <%= Number(tld.harga_tld).toLocaleString('id-ID') %>,- / year
+                                                </td>
+                                                <td class="text-center">
+                                                    <% if (tld.status_tld === 1) { %>
+                                                        <small class="badge badge-success">AVAILABLE</small>
+                                                    <% } else { %>
+                                                        <small class="badge badge-danger">NOT AVAILABLE</small>
+                                                    <% } %>
+                                                </td>
+                                                <td class="text-center">
+                                                    <a href="/Domain/beli" class="btn btn-sm btn-primary">
+                                                        Order
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        <% }); %>
+                                    <% } else { %>
+                                        <tr>
+                                            <td colspan="5" class="text-center text-muted py-3">No TLDs available</td>
+                                        </tr>
+                                    <% } %>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- User's Registered Domains -->
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card card-info">
+                        <div class="card-header">
+                            <h3 class="card-title">Your Domain List</h3>
+                        </div>
+                        <div class="card-body">
+                            <table id="tabelDomain" class="table table-bordered table-hover">
+                                <thead>
+                                    <tr>
+                                        <th class="text-center">No</th>
+                                        <th class="text-center">Domain</th>
+                                        <th class="text-center">Registration Date</th>
+                                        <th class="text-center">Due Date</th>
+                                        <th class="text-center">Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <% if (domains && domains.length > 0) { %>
+                                        <% domains.forEach(function(domain, i) { %>
+                                            <tr>
+                                                <td class="text-center"><%= i + 1 %></td>
+                                                <td class="text-center">
+                                                    <%= domain.nama_domain %>
+                                                </td>
+                                                <td class="text-center">
+                                                    <% 
+                                                      const regDate = new Date(domain.date_register);
+                                                      const rd = String(regDate.getDate()).padStart(2, '0');
+                                                      const rm = String(regDate.getMonth() + 1).padStart(2, '0');
+                                                      const ry = regDate.getFullYear();
+                                                    %>
+                                                    <%= `${rd}-${rm}-${ry}` %>
+                                                </td>
+                                                <td class="text-center">
+                                                    <% 
+                                                      const dueDate = new Date(domain.due_date);
+                                                      const dd = String(dueDate.getDate()).padStart(2, '0');
+                                                      const dm = String(dueDate.getMonth() + 1).padStart(2, '0');
+                                                      const dy = dueDate.getFullYear();
+                                                    %>
+                                                    <%= `${dd}-${dm}-${dy}` %>
+                                                </td>
+                                                <td class="text-center">
+                                                    <% if (domain.status === 1) { %>
+                                                        <small class="badge badge-success">ACTIVE</small>
+                                                    <% } else { %>
+                                                        <small class="badge badge-warning">PENDING</small>
+                                                    <% } %>
+                                                </td>
+                                            </tr>
+                                        <% }); %>
+                                    <% } else { %>
+                                        <tr>
+                                            <td colspan="5" class="text-center text-muted py-3">No registered domains found</td>
+                                        </tr>
+                                    <% } %>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+</div>
+
+<%- include('../partials/user_footer') %>

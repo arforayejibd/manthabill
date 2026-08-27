@@ -1,0 +1,212 @@
+<%- include('../partials/user_header') %>
+
+<%- include('../partials/user_navbar') %>
+<%- include('../partials/user_sidebar') %>
+
+<div class="content-wrapper">
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1>Profile Settings</h1>
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="/Member">Home</a></li>
+                        <li class="breadcrumb-item active">Settings</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+
+                <!-- Left: Profile card -->
+                <div class="col-md-3">
+                    <div class="card card-primary card-outline">
+                        <div class="card-body box-profile">
+                            <div class="text-center">
+                                <% 
+                                  let avatarUrl = '/assets/AdminLTE3/dist/img/avatar5.png';
+                                  if (userDetail && userDetail.gambar) {
+                                    if (userDetail.gambar.startsWith('avatars/')) {
+                                      avatarUrl = '/storage/' + userDetail.gambar;
+                                    } else if (userDetail.gambar !== 'default.jpg') {
+                                      avatarUrl = '/gambar/' + userDetail.gambar;
+                                    }
+                                  }
+                                %>
+                                <img class="profile-user-img img-fluid img-circle"
+                                     src="<%= avatarUrl %>"
+                                     alt="User profile picture">
+                            </div>
+                            <h3 class="profile-username text-center">
+                                <%= (userDetail && userDetail.nama_depan) ? userDetail.nama_depan : 'Member' %>
+                            </h3>
+                            <p class="text-muted text-center">Customer</p>
+                            <ul class="list-group list-group-unbordered mb-3">
+                                <li class="list-group-item">
+                                    <b>Registered Since</b>
+                                    <a class="float-right">
+                                        <% 
+                                          const regDate = new Date(user.date_create);
+                                          const rd = String(regDate.getDate()).padStart(2, '0');
+                                          const rm = String(regDate.getMonth() + 1).padStart(2, '0');
+                                          const ry = regDate.getFullYear();
+                                        %>
+                                        <%= isNaN(regDate.getTime()) ? '-' : `${rd}-${rm}-${ry}` %>
+                                    </a>
+                                </li>
+                                <li class="list-group-item">
+                                    <b>Account Status</b>
+                                    <a class="float-right text-success font-weight-bold">Verified</a>
+                                </li>
+                            </ul>
+                            <a href="/Setting/password" class="btn btn-info btn-block">
+                                <b>Change Password</b>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right: Profile update form -->
+                <div class="col-md-9">
+                    <div class="card card-primary card-outline">
+                        <div class="card-body box-profile">
+
+                            <% if (pesan2) { %>
+                                <%- pesan2 %>
+                            <% } %>
+
+                            <% if (errors && errors.length > 0) { %>
+                                <div class="alert alert-danger">
+                                    <ul class="mb-0">
+                                        <% errors.forEach(function(error) { %>
+                                            <li><%= error %></li>
+                                        <% }); %>
+                                    </ul>
+                                </div>
+                            <% } %>
+
+                            <form action="/Setting/update" method="POST" enctype="multipart/form-data">
+                                <div class="row">
+                                    <div class="col-md-6">
+
+                                        <div class="form-group">
+                                            <label>First Name <span class="text-danger">*</span></label>
+                                            <input type="text" name="namaDepan"
+                                                   class="form-control"
+                                                   placeholder="First Name" maxlength="20"
+                                                   value="<%= typeof oldNamaDepan !== 'undefined' ? oldNamaDepan : (userDetail ? userDetail.nama_depan : '') %>" required>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label>Last Name</label>
+                                            <input type="text" name="namaBelakang"
+                                                   class="form-control"
+                                                   placeholder="Last Name" maxlength="30"
+                                                   value="<%= typeof oldNamaBelakang !== 'undefined' ? oldNamaBelakang : (userDetail ? userDetail.nama_belakang : '') %>">
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label>Company Name</label>
+                                            <input type="text" name="namaUsaha"
+                                                   class="form-control"
+                                                   placeholder="Company / Business Name" maxlength="50"
+                                                   value="<%= typeof oldNamaUsaha !== 'undefined' ? oldNamaUsaha : (userDetail ? userDetail.nama_usaha : '') %>">
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label>Email Address <span class="text-danger">*</span></label>
+                                            <input type="email" name="email"
+                                                   class="form-control"
+                                                   value="<%= user.email %>" readonly required>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label>Phone Number</label>
+                                            <input type="text" name="notelp"
+                                                   class="form-control"
+                                                   placeholder="Phone Number" maxlength="30"
+                                                   value="<%= typeof oldNotelp !== 'undefined' ? oldNotelp : (userDetail ? userDetail.phone : '') %>">
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label>Profile Picture</label>
+                                            <input type="file" name="gambar"
+                                                   class="form-control"
+                                                   accept=".jpg,.jpeg,.png,.webp">
+                                        </div>
+
+                                    </div>
+                                    <div class="col-md-6">
+
+                                        <div class="form-group">
+                                            <label>Address Line 1 <span class="text-danger">*</span></label>
+                                            <input type="text" name="alamat1"
+                                                   class="form-control"
+                                                   placeholder="Street Address, P.O. Box" maxlength="200"
+                                                   value="<%= typeof oldAlamat1 !== 'undefined' ? oldAlamat1 : (userDetail ? userDetail.alamat : '') %>" required>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label>Address Line 2</label>
+                                            <input type="text" name="alamat2"
+                                                   class="form-control"
+                                                   placeholder="Apartment, suite, unit, building, floor" maxlength="200"
+                                                   value="<%= typeof oldAlamat2 !== 'undefined' ? oldAlamat2 : (userDetail ? userDetail.alamat2 : '') %>">
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label>City <span class="text-danger">*</span></label>
+                                            <input type="text" name="kota"
+                                                   class="form-control"
+                                                   placeholder="City" maxlength="30"
+                                                   value="<%= typeof oldKota !== 'undefined' ? oldKota : (userDetail ? userDetail.kota : '') %>" required>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label>State / Province <span class="text-danger">*</span></label>
+                                            <input type="text" name="provinsi"
+                                                   class="form-control"
+                                                   placeholder="State / Province" maxlength="50"
+                                                   value="<%= typeof oldProvinsi !== 'undefined' ? oldProvinsi : (userDetail ? userDetail.provinsi : '') %>" required>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label>ZIP / Postal Code</label>
+                                            <input type="text" name="kodepos"
+                                                   class="form-control"
+                                                   placeholder="ZIP / Postal Code" maxlength="10"
+                                                   value="<%= typeof oldKodepos !== 'undefined' ? oldKodepos : (userDetail ? userDetail.kodepos : '') %>">
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label>Country <span class="text-danger">*</span></label>
+                                            <input type="text" name="negara"
+                                                   class="form-control"
+                                                   placeholder="Country" maxlength="30"
+                                                   value="<%= typeof oldNegara !== 'undefined' ? oldNegara : (userDetail ? userDetail.negara : '') %>" required>
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                                <div class="col-md-12 px-0">
+                                    <button type="submit" class="btn btn-primary">Update Profile</button>
+                                </div>
+                            </form>
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+</div>
+
+<%- include('../partials/user_footer') %>

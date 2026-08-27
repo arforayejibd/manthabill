@@ -1,0 +1,178 @@
+<%- include('../partials/user_header') %>
+
+<%- include('../partials/user_navbar') %>
+<%- include('../partials/user_sidebar') %>
+
+<div class="content-wrapper">
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1>Products</h1>
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="/Member">Home</a></li>
+                        <li class="breadcrumb-item active">Products</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="content">
+        <div class="container-fluid">
+
+            <% if (pesan) { %>
+                <%- pesan %>
+            <% } %>
+
+            <!-- Personal Hosting -->
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card card-info">
+                        <div class="card-header">
+                            <h3 class="card-title">Personal Hosting</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <% if (personal && personal.length > 0) { %>
+                                    <% personal.forEach(function(product) { %>
+                                        <div class="col-md-4 mb-3">
+                                            <div class="card card-outline card-primary h-100">
+                                                <div class="card-header text-center">
+                                                    <h4 class="card-title"><%= product.nama_product %></h4>
+                                                </div>
+                                                <div class="card-body">
+                                                    <h3 class="text-center text-primary mb-3">
+                                                        Rp <%= Number(product.harga).toLocaleString('id-ID') %>
+                                                        <small class="text-muted">/month</small>
+                                                    </h3>
+                                                    <ul class="list-unstyled">
+                                                        <li><i class="fas fa-hdd mr-2"></i> Disk: <%= product.kapasitas %></li>
+                                                        <% if (product.bandwith) { %>
+                                                            <li><i class="fas fa-wifi mr-2"></i> Bandwidth: <%= product.bandwith %></li>
+                                                        <% } %>
+                                                        <% if (product.addon_domain) { %>
+                                                            <li><i class="fas fa-globe mr-2"></i> Addon Domain: <%= product.addon_domain %></li>
+                                                        <% } %>
+                                                        <% if (product.email_account) { %>
+                                                            <li><i class="fas fa-envelope mr-2"></i> Email: <%= product.email_account %></li>
+                                                        <% } %>
+                                                        <% if (product.database_account) { %>
+                                                            <li><i class="fas fa-database mr-2"></i> Database: <%= product.database_account %></li>
+                                                        <% } %>
+                                                        <% if (product.ftp_account) { %>
+                                                            <li><i class="fas fa-folder mr-2"></i> FTP: <%= product.ftp_account %></li>
+                                                        <% } %>
+                                                        <% if (product.pilihan_1) { %>
+                                                            <li><i class="fas fa-check mr-2 text-success"></i> <%= product.pilihan_1 %></li>
+                                                        <% } %>
+                                                        <% if (product.pilihan_2) { %>
+                                                            <li><i class="fas fa-check mr-2 text-success"></i> <%= product.pilihan_2 %></li>
+                                                        <% } %>
+                                                        <% if (product.pilihan_3) { %>
+                                                            <li><i class="fas fa-check mr-2 text-success"></i> <%= product.pilihan_3 %></li>
+                                                        <% } %>
+                                                        <% if (product.pilihan_4) { %>
+                                                            <li><i class="fas fa-check mr-2 text-success"></i> <%= product.pilihan_4 %></li>
+                                                        <% } %>
+                                                    </ul>
+                                                </div>
+                                                <div class="card-footer text-center">
+                                                    <a href="/Product/beli/<%= encrypt(product.id) %>"
+                                                       class="btn btn-primary btn-block">
+                                                        Order Now
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    <% }); %>
+                                <% } else { %>
+                                    <div class="col-12">
+                                        <p class="text-muted text-center py-3">No Personal Hosting packages available.</p>
+                                    </div>
+                                <% } %>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Professional Hosting -->
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card card-warning">
+                        <div class="card-header">
+                            <h3 class="card-title">Professional Hosting</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <% if (professional && professional.length > 0) { %>
+                                    <% professional.forEach(function(product) { %>
+                                        <div class="col-md-4 mb-3">
+                                            <div class="card card-outline card-warning h-100">
+                                                <div class="card-header text-center">
+                                                    <h4 class="card-title"><%= product.nama_product %></h4>
+                                                </div>
+                                                <div class="card-body">
+                                                    <h3 class="text-center text-warning mb-3">
+                                                        Rp <%= Number(product.harga).toLocaleString('id-ID') %>
+                                                        <small class="text-muted">/year</small>
+                                                    </h3>
+                                                    <ul class="list-unstyled">
+                                                        <li><i class="fas fa-hdd mr-2"></i> Disk: <%= product.kapasitas %></li>
+                                                        <% if (product.bandwith) { %>
+                                                            <li><i class="fas fa-wifi mr-2"></i> Bandwidth: <%= product.bandwith %></li>
+                                                        <% } %>
+                                                        <% if (product.addon_domain) { %>
+                                                            <li><i class="fas fa-globe mr-2"></i> Addon Domain: <%= product.addon_domain %></li>
+                                                        <% } %>
+                                                        <% if (product.email_account) { %>
+                                                            <li><i class="fas fa-envelope mr-2"></i> Email: <%= product.email_account %></li>
+                                                        <% } %>
+                                                        <% if (product.database_account) { %>
+                                                            <li><i class="fas fa-database mr-2"></i> Database: <%= product.database_account %></li>
+                                                        <% } %>
+                                                        <% if (product.ftp_account) { %>
+                                                            <li><i class="fas fa-folder mr-2"></i> FTP: <%= product.ftp_account %></li>
+                                                        <% } %>
+                                                        <% if (product.pilihan_1) { %>
+                                                            <li><i class="fas fa-check mr-2 text-success"></i> <%= product.pilihan_1 %></li>
+                                                        <% } %>
+                                                        <% if (product.pilihan_2) { %>
+                                                            <li><i class="fas fa-check mr-2 text-success"></i> <%= product.pilihan_2 %></li>
+                                                        <% } %>
+                                                        <% if (product.pilihan_3) { %>
+                                                            <li><i class="fas fa-check mr-2 text-success"></i> <%= product.pilihan_3 %></li>
+                                                        <% } %>
+                                                        <% if (product.pilihan_4) { %>
+                                                            <li><i class="fas fa-check mr-2 text-success"></i> <%= product.pilihan_4 %></li>
+                                                        <% } %>
+                                                    </ul>
+                                                </div>
+                                                <div class="card-footer text-center">
+                                                    <a href="/Product/beli/<%= encrypt(product.id) %>"
+                                                       class="btn btn-warning btn-block">
+                                                        Order Now
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    <% }); %>
+                                <% } else { %>
+                                    <div class="col-12">
+                                        <p class="text-muted text-center py-3">No Professional Hosting packages available.</p>
+                                    </div>
+                                <% } %>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+</div>
+
+<%- include('../partials/user_footer') %>

@@ -1,0 +1,46 @@
+<%- include('../partials/admin_header') %>
+
+<%- include('../partials/admin_navbar') %>
+<%- include('../partials/admin_sidebar') %>
+
+<div class="content-wrapper">
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6"><h1>Help</h1></div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="/staff/Admin">Home</a></li>
+                        <li class="breadcrumb-item active">Help</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="content">
+        <div class="container-fluid">
+            <div class="card card-info">
+                <div class="card-header">
+                    <h3 class="card-title"><i class="fas fa-info-circle mr-1"></i> ManthaBill Admin Help</h3>
+                </div>
+                <div class="card-body">
+                    <h5>Staff Usage Guide</h5>
+                    <ul>
+                        <li>Use the <strong>Clients</strong> menu to manage user profiles, send custom messages, or activate/suspend client login.</li>
+                        <li>Use the <strong>Service → Shared Hosting</strong> menu to verify hostings, assign cPanel logins, suspend, or terminate accounts.</li>
+                        <li>Use the <strong>Invoice</strong> menu to review custom billing items and verify customer payment confirmation receipts.</li>
+                        <li>Use the <strong>Inbox</strong> menu to respond to customer support tickets.</li>
+                        <li>Use the <strong>Hosting Packages</strong> menu to add or edit hosting plan specifications and pricing.</li>
+                        <li>Use the <strong>Setting → General</strong> menu to customize business details, bank credentials, and tax settings.</li>
+                        <li>Use the <strong>Setting → API</strong> menu to configure SMTP mail server credentials.</li>
+                    </ul>
+                    <hr>
+                    <p class="text-muted">ManthaBill v2.1 — Ported to Node.js & Express</p>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+<%- include('../partials/admin_footer') %>

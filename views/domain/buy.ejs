@@ -1,0 +1,128 @@
+<%- include('../partials/user_header') %>
+
+<%- include('../partials/user_navbar') %>
+<%- include('../partials/user_sidebar') %>
+
+<div class="content-wrapper">
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1>Buy Domain</h1>
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="/Member">Home</a></li>
+                        <li class="breadcrumb-item"><a href="/Domain">Domain</a></li>
+                        <li class="breadcrumb-item active">Buy</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="content">
+        <div class="container-fluid">
+
+            <% if (pesan) { %>
+                <%- pesan %>
+            <% } %>
+
+            <div class="row">
+                <!-- Domain Purchase Form -->
+                <div class="col-md-7">
+                    <div class="card card-info">
+                        <div class="card-header">
+                            <h3 class="card-title">Register New Domain</h3>
+                        </div>
+                        <div class="card-body">
+
+                            <% if (errors && errors.length > 0) { %>
+                                <div class="alert alert-danger" role="alert">
+                                    <ul class="mb-0">
+                                        <% errors.forEach(function(error) { %>
+                                            <li><%= error %></li>
+                                        <% }); %>
+                                    </ul>
+                                </div>
+                            <% } %>
+
+                            <form action="/Domain/beli" method="POST">
+                                <div class="form-group">
+                                    <label for="domain">Domain Name</label>
+                                    <small class="text-muted d-block mb-1">**Domain name only, without http/https or www</small>
+                                    <div class="input-group">
+                                        <input type="text"
+                                               name="domain"
+                                               id="domain"
+                                               class="form-control"
+                                               placeholder="e.g. yourdomain"
+                                               value="<%= typeof oldDomain !== 'undefined' ? oldDomain : '' %>"
+                                               required>
+                                        <div class="input-group-append">
+                                            <span class="input-group-text">.</span>
+                                        </div>
+                                        <select name="tld_id"
+                                                id="tld_id"
+                                                class="form-control"
+                                                style="max-width: 130px;"
+                                                required>
+                                            <option value="">-- TLD --</option>
+                                            <% tldList.forEach(function(tld) { %>
+                                                <option value="<%= tld.id %>"
+                                                    <%= (typeof oldTldId !== 'undefined' && oldTldId == tld.id) ? 'selected' : '' %>>
+                                                    .<%= tld.tld.toUpperCase() %>
+                                                </option>
+                                            <% }); %>
+                                        </select>
+                                    </div>
+                                </div>
+                                <button type="submit" class="btn btn-block btn-primary btn-lg">
+                                    ORDER DOMAIN
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TLD Pricing Info -->
+                <div class="col-md-5">
+                    <div class="card card-info">
+                        <div class="card-header">
+                            <h3 class="card-title">Domain Pricing</h3>
+                        </div>
+                        <div class="card-body p-0">
+                            <table class="table table-striped mb-0">
+                                <thead>
+                                    <tr>
+                                        <th>Extension</th>
+                                        <th class="text-right">Price / Year</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <% if (tldList && tldList.length > 0) { %>
+                                        <% tldList.forEach(function(tld) { %>
+                                            <tr>
+                                                <td><strong>.<%= tld.tld.toUpperCase() %></strong></td>
+                                                <td class="text-right">
+                                                    Rp <%= Number(tld.harga_tld).toLocaleString('id-ID') %>,-
+                                                </td>
+                                            </tr>
+                                        <% }); %>
+                                    <% } else { %>
+                                        <tr>
+                                            <td colspan="2" class="text-center text-muted py-3">No TLDs available</td>
+                                        </tr>
+                                    <% } %>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+</div>
+
+<%- include('../partials/user_footer') %>

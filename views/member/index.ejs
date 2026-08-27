@@ -1,0 +1,284 @@
+<%- include('../partials/user_header') %>
+
+<%- include('../partials/user_navbar') %>
+<%- include('../partials/user_sidebar') %>
+
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1>Dashboard</h1>
+                    <small class="text-muted"><%= setting.nama_hosting || '' %></small>
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item active">Home</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+        <div class="container-fluid">
+
+            <!-- Stat Boxes -->
+            <div class="row">
+                <!-- Services -->
+                <div class="col-lg-3 col-6">
+                    <div class="small-box bg-info">
+                        <div class="inner">
+                            <h3><%= hostingsCount %></h3>
+                            <p>SERVICES</p>
+                        </div>
+                        <div class="icon">
+                            <i class="ion ion-social-buffer"></i>
+                        </div>
+                        <a href="/Service" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                    </div>
+                </div>
+
+                <!-- Domain -->
+                <div class="col-lg-3 col-6">
+                    <div class="small-box bg-success">
+                        <div class="inner">
+                            <h3><%= domainsCount %></h3>
+                            <p>DOMAINS</p>
+                        </div>
+                        <div class="icon">
+                            <i class="ion ion-earth"></i>
+                        </div>
+                        <a href="/Domain" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                    </div>
+                </div>
+
+                <!-- Invoice -->
+                <div class="col-lg-3 col-6">
+                    <div class="small-box bg-warning">
+                        <div class="inner">
+                            <h3><%= invoicesCount %></h3>
+                            <p>INVOICES</p>
+                        </div>
+                        <div class="icon">
+                            <i class="ion ion-card"></i>
+                        </div>
+                        <a href="/Invoice" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                    </div>
+                </div>
+
+                <!-- Ticket Support -->
+                <div class="col-lg-3 col-6">
+                    <div class="small-box bg-danger">
+                        <div class="inner">
+                            <h3><%= ticketsCount %></h3>
+                            <p>SUPPORT TICKETS</p>
+                        </div>
+                        <div class="icon">
+                            <i class="ion ion-chatbubbles"></i>
+                        </div>
+                        <a href="/Ticket" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                    </div>
+                </div>
+            </div>
+            <!-- /End Stat Boxes -->
+
+            <!-- Recent Invoices + Active Services -->
+            <div class="row">
+                <!-- Recent Invoices -->
+                <div class="col-md-8">
+                    <div class="card card-warning">
+                        <div class="card-header">
+                            <h3 class="card-title">Recent Invoices</h3>
+                        </div>
+                        <div class="card-body p-0">
+                            <div class="table-responsive">
+                                <table class="table table-striped no-margin">
+                                    <thead>
+                                        <tr>
+                                            <th>Invoice No</th>
+                                            <th>Product</th>
+                                            <th>Total</th>
+                                            <th>Due Date</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <% if (recentInvoices && recentInvoices.length > 0) { %>
+                                            <% recentInvoices.forEach(function(invoice) { %>
+                                                <tr>
+                                                    <td><%= invoice.no_invoice %></td>
+                                                    <td><%= invoice.detail_produk %></td>
+                                                    <td>Rp <%= Number(invoice.total_jumlah).toLocaleString('id-ID') %></td>
+                                                    <td>
+                                                        <% 
+                                                          const due = new Date(invoice.due);
+                                                          const dd = String(due.getDate()).padStart(2, '0');
+                                                          const mm = String(due.getMonth() + 1).padStart(2, '0');
+                                                          const yyyy = due.getFullYear();
+                                                        %>
+                                                        <%= `${dd}-${mm}-${yyyy}` %>
+                                                    </td>
+                                                    <td>
+                                                        <% if (invoice.status_inv === 1) { %>
+                                                            <span class="badge badge-success">Paid</span>
+                                                        <% } else if (invoice.status_inv === 2) { %>
+                                                            <span class="badge badge-warning">Unpaid / Pending</span>
+                                                        <% } else if (invoice.status_inv === 3) { %>
+                                                            <span class="badge badge-info">Confirmed</span>
+                                                        <% } else { %>
+                                                            <span class="badge badge-secondary">Void</span>
+                                                        <% } %>
+                                                    </td>
+                                                </tr>
+                                            <% }); %>
+                                        <% } else { %>
+                                            <tr>
+                                                <td colspan="5" class="text-center text-muted py-3">No invoices found</td>
+                                            </tr>
+                                        <% } %>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Active Services -->
+                <div class="col-md-4">
+                    <div class="card card-info">
+                        <div class="card-header">
+                            <h3 class="card-title">Active Services</h3>
+                        </div>
+                        <div class="card-body p-0">
+                            <ul class="list-group list-group-flush">
+                                <% if (activeHostings && activeHostings.length > 0) { %>
+                                    <% activeHostings.forEach(function(hosting) { %>
+                                        <li class="list-group-item">
+                                            <div class="d-flex justify-content-between align-items-center">
+                                                <div>
+                                                    <strong><%= hosting.nama_hosting %></strong>
+                                                    <br>
+                                                    <small class="text-muted"><%= hosting.domain %></small>
+                                                </div>
+                                                <small class="text-muted">
+                                                    <% 
+                                                      const end = new Date(hosting.end_hosting);
+                                                      const edd = String(end.getDate()).padStart(2, '0');
+                                                      const emm = String(end.getMonth() + 1).padStart(2, '0');
+                                                      const eyyyy = end.getFullYear();
+                                                    %>
+                                                    until <%= `${edd}/${emm}/${eyyyy}` %>
+                                                </small>
+                                            </div>
+                                        </li>
+                                    <% }); %>
+                                <% } else { %>
+                                    <li class="list-group-item text-center text-muted py-3">No active services found</li>
+                                <% } %>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- /End Recent Invoices + Active Services -->
+
+            <!-- News + Support Ticket -->
+            <div class="row">
+                <!-- Latest News -->
+                <div class="col-md-6">
+                    <div class="card card-primary">
+                        <div class="card-header">
+                            <h3 class="card-title">Latest News</h3>
+                        </div>
+                        <div class="card-body">
+                            <% if (news && news.length > 0) { %>
+                                <% news.forEach(function(berita) { %>
+                                    <h3><%= berita.judul_berita.toUpperCase() %></h3>
+                                    <hr>
+                                    <p><%- berita.isi_berita.replace(/\n/g, '<br>') %></p>
+                                    <hr>
+                                    <small>
+                                        <% 
+                                          const tgl = new Date(berita.tgl_berita);
+                                          const tdd = String(tgl.getDate()).padStart(2, '0');
+                                          const tmm = String(tgl.getMonth() + 1).padStart(2, '0');
+                                          const tyyyy = tgl.getFullYear();
+                                        %>
+                                        <p class="text-right">Posted: <%= `${tdd}-${tmm}-${tyyyy}` %></p>
+                                    </small>
+                                <% }); %>
+                            <% } else { %>
+                                <p class="text-muted text-center py-3">No news updates available.</p>
+                            <% } %>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Support Tickets -->
+                <div class="col-md-6">
+                    <div class="card card-danger">
+                        <div class="card-header">
+                            <h3 class="card-title">Recent Support Tickets</h3>
+                        </div>
+                        <div class="card-body p-0">
+                            <div class="table-responsive">
+                                <table class="table no-margin">
+                                    <thead>
+                                        <tr>
+                                            <th>Ticket No</th>
+                                            <th>Subject</th>
+                                            <th>Status</th>
+                                            <th>Date</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <% if (recentTickets && recentTickets.length > 0) { %>
+                                            <% recentTickets.forEach(function(ticket) { %>
+                                                <tr>
+                                                    <td><a href="/Ticket/lihat_ticket/<%= ticket.inbox_key %>"><%= ticket.no_inbox %></a></td>
+                                                    <td><%= ticket.subyek %></td>
+                                                    <td>
+                                                        <% if (ticket.status_inbox === 1) { %>
+                                                            <span class="badge badge-warning">Customer Reply</span>
+                                                        <% } else if (ticket.status_inbox === 2) { %>
+                                                            <span class="badge badge-success">Answered</span>
+                                                        <% } else { %>
+                                                            <span class="badge badge-secondary">Closed</span>
+                                                        <% } %>
+                                                    </td>
+                                                    <td>
+                                                        <% 
+                                                          const tDate = new Date(ticket.tgl_inbox);
+                                                          const td = String(tDate.getDate()).padStart(2, '0');
+                                                          const tm = String(tDate.getMonth() + 1).padStart(2, '0');
+                                                          const ty = tDate.getFullYear();
+                                                        %>
+                                                        <%= `${td}-${tm}-${ty}` %>
+                                                    </td>
+                                                </tr>
+                                            <% }); %>
+                                        <% } else { %>
+                                            <tr>
+                                                <td colspan="4" class="text-center text-muted py-3">No tickets found</td>
+                                            </tr>
+                                        <% } %>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- /End News + Support Ticket -->
+
+        </div>
+    </section>
+    <!-- /Main content -->
+</div>
+<!-- /.content-wrapper -->
+
+<%- include('../partials/user_footer') %>

@@ -1,0 +1,82 @@
+<!-- Main Sidebar Container -->
+<aside class="main-sidebar sidebar-dark-primary elevation-4">
+    <!-- Brand Logo -->
+    <a href="/Member" class="brand-link">
+        <img src="/assets/AdminLTE3/dist/img/AdminLTELogo.png" alt="Logo"
+             class="brand-image img-circle elevation-3" style="opacity: .8">
+        <span class="brand-text font-weight-light"><%= setting.nama_hosting || 'ManthaBill' %></span>
+    </a>
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <!-- Sidebar user panel -->
+        <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+            <div class="image">
+                <% 
+                  let avatarUrl = '/assets/AdminLTE3/dist/img/avatar5.png';
+                  if (userDetail && userDetail.gambar) {
+                    if (userDetail.gambar.startsWith('avatars/')) {
+                      avatarUrl = '/storage/' + userDetail.gambar;
+                    } else if (userDetail.gambar !== 'default.jpg') {
+                      avatarUrl = '/gambar/' + userDetail.gambar;
+                    }
+                  }
+                %>
+                <img src="<%= avatarUrl %>" class="img-circle elevation-2" alt="User Image">
+            </div>
+            <div class="info ml-3">
+                <a href="/Member" class="d-block"><%= (userDetail && userDetail.nama_depan) ? userDetail.nama_depan : 'Member' %></a>
+            </div>
+        </div>
+
+        <!-- Sidebar Menu -->
+        <nav class="mt-2">
+            <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+                <li class="nav-item">
+                    <a href="/Member" class="nav-link <%= typeof activeMenu !== 'undefined' && activeMenu === 'dashboard' ? 'active' : '' %>">
+                        <i class="nav-icon fas fa-tachometer-alt"></i>
+                        <p>Dashboard</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/Product" class="nav-link <%= typeof activeMenu !== 'undefined' && activeMenu === 'products' ? 'active' : '' %>">
+                        <i class="nav-icon fas fa-server"></i>
+                        <p>Product</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/Service" class="nav-link <%= typeof activeMenu !== 'undefined' && activeMenu === 'services' ? 'active' : '' %>">
+                        <i class="nav-icon fas fa-book"></i>
+                        <p>Service</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/Invoice" class="nav-link <%= typeof activeMenu !== 'undefined' && activeMenu === 'invoices' ? 'active' : '' %>">
+                        <i class="nav-icon fas fa-credit-card"></i>
+                        <p>Invoice</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/Domain" class="nav-link <%= typeof activeMenu !== 'undefined' && activeMenu === 'domains' ? 'active' : '' %>">
+                        <i class="nav-icon fas fa-globe"></i>
+                        <p>Domain</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/Ticket" class="nav-link <%= typeof activeMenu !== 'undefined' && activeMenu === 'tickets' ? 'active' : '' %>">
+                        <i class="nav-icon fas fa-bullhorn"></i>
+                        <p>Ticket</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/Setting" class="nav-link <%= typeof activeMenu !== 'undefined' && activeMenu === 'settings' ? 'active' : '' %>">
+                        <i class="nav-icon fas fa-cog"></i>
+                        <p>Setting</p>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+        <!-- /.sidebar-menu -->
+    </div>
+    <!-- /.sidebar -->
+</aside>

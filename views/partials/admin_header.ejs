@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title><%= typeof title !== 'undefined' ? title : (setting.judul_hosting || 'ManthaBill') %></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" href="/assets/AdminLTE3/dist/img/AdminLTELogo.png">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="/assets/AdminLTE3/plugins/fontawesome-free/css/all.min.css">
+    <!-- AdminLTE -->
+    <link rel="stylesheet" href="/assets/AdminLTE3/dist/css/adminlte.min.css">
+    <!-- DataTables -->
+    <link rel="stylesheet" href="/assets/AdminLTE3/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
+    <link rel="stylesheet" href="/assets/AdminLTE3/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
+    <!-- Pace -->
+    <link rel="stylesheet" href="/assets/AdminLTE3/plugins/pace-progress/themes/black/pace-theme-flat-top.css">
+    <% if (typeof styles !== 'undefined') { %>
+        <%- styles %>
+    <% } %>
+</head>
+<body class="hold-transition sidebar-mini pace-danger">
+<div class="wrapper">

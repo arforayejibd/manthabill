@@ -1,0 +1,184 @@
+<%- include('../partials/user_header') %>
+
+<%- include('../partials/user_navbar') %>
+<%- include('../partials/user_sidebar') %>
+
+<div class="content-wrapper">
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1>Order Configuration</h1>
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="/Member">Home</a></li>
+                        <li class="breadcrumb-item"><a href="/Product">Products</a></li>
+                        <li class="breadcrumb-item active">Configure</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="content">
+        <div class="container-fluid">
+
+            <% if (pesan) { %>
+                <%- pesan %>
+            <% } %>
+
+            <div class="row">
+                <!-- Purchase Form -->
+                <div class="col-md-7">
+                    <div class="card card-info">
+                        <div class="card-header">
+                            <h3 class="card-title">Order Form — <%= product.nama_product %></h3>
+                        </div>
+                        <div class="card-body">
+
+                            <% if (errors && errors.length > 0) { %>
+                                <div class="alert alert-danger" role="alert">
+                                    <ul class="mb-0">
+                                        <% errors.forEach(function(error) { %>
+                                            <li><%= error %></li>
+                                        <% }); %>
+                                    </ul>
+                                </div>
+                            <% } %>
+
+                            <form action="/Product/invoice/<%= encrypt(product.id) %>" method="POST">
+                                <input type="hidden" name="diskon_unik" value="<%= typeof oldDiskonUnik !== 'undefined' ? oldDiskonUnik : diskonUnik %>">
+
+                                <!-- Duration Selector -->
+                                <div class="form-group">
+                                    <label>Billing Cycle</label>
+                                    <% if (product.type_product === 1) { %>
+                                        <!-- Personal: monthly -->
+                                        <% 
+                                          const cycles = [
+                                            { val: 1, label: '1 Month' },
+                                            { val: 3, label: '3 Months' },
+                                            { val: 6, label: '6 Months' },
+                                            { val: 12, label: '12 Months' }
+                                          ];
+                                        %>
+                                        <% cycles.forEach(function(cycle) { %>
+                                            <div class="form-check">
+                                                <input type="radio"
+                                                       name="pilihan"
+                                                       id="pilihan_<%= cycle.val %>"
+                                                       value="<%= cycle.val %>"
+                                                       class="form-check-input"
+                                                       <%= (typeof oldPilihan !== 'undefined' ? oldPilihan : 1) == cycle.val ? 'checked' : '' %>>
+                                                <label class="form-check-label" for="pilihan_<%= cycle.val %>"><%= cycle.label %></label>
+                                            </div>
+                                        <% }); %>
+                                    <% } else { %>
+                                        <!-- Professional: yearly -->
+                                        <% 
+                                          const cycles = [
+                                            { val: 1, label: '1 Year' },
+                                            { val: 2, label: '2 Years' }
+                                          ];
+                                        %>
+                                        <% cycles.forEach(function(cycle) { %>
+                                            <div class="form-check">
+                                                <input type="radio"
+                                                       name="pilihan"
+                                                       id="pilihan_<%= cycle.val %>"
+                                                       value="<%= cycle.val %>"
+                                                       class="form-check-input"
+                                                       <%= (typeof oldPilihan !== 'undefined' ? oldPilihan : 1) == cycle.val ? 'checked' : '' %>>
+                                                <label class="form-check-label" for="pilihan_<%= cycle.val %>"><%= cycle.label %></label>
+                                            </div>
+                                        <% }); %>
+                                    <% } %>
+                                </div>
+
+                                <!-- Domain Input -->
+                                <div class="form-group">
+                                    <label for="domain">Domain Name</label>
+                                    <small class="text-muted d-block mb-1">**Domain name only, without http/https or www</small>
+                                    <div class="input-group">
+                                        <input type="text"
+                                               name="domain"
+                                               id="domain"
+                                               class="form-control"
+                                               placeholder="e.g. yourdomain"
+                                               value="<%= typeof oldDomain !== 'undefined' ? oldDomain : '' %>"
+                                               required>
+                                        <div class="input-group-append">
+                                            <span class="input-group-text">.</span>
+                                        </div>
+                                        <select name="tld_name"
+                                                id="tld_name"
+                                                class="form-control"
+                                                style="max-width: 130px;"
+                                                required>
+                                            <option value="">-- TLD --</option>
+                                            <% tldList.forEach(function(tld) { %>
+                                                <option value="<%= tld.tld %>"
+                                                    <%= (typeof oldTldName !== 'undefined' && oldTldName === tld.tld) ? 'selected' : '' %>>
+                                                    .<%= tld.tld.toUpperCase() %>
+                                                </option>
+                                            <% }); %>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <button type="submit" class="btn btn-block btn-primary btn-lg">
+                                    ORDER NOW
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Order Summary -->
+                <div class="col-md-5">
+                    <div class="card card-info">
+                        <div class="card-header">
+                            <h3 class="card-title">Order Summary</h3>
+                        </div>
+                        <div class="card-body p-0">
+                            <table class="table table-striped mb-0">
+                                <tbody>
+                                    <tr>
+                                        <td><strong>Product</strong></td>
+                                        <td><%= product.nama_product %></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Price</strong></td>
+                                        <td>Rp <%= Number(product.harga).toLocaleString('id-ID') %></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Disk Space</strong></td>
+                                        <td><%= product.kapasitas %></td>
+                                    </tr>
+                                    <% if (product.bandwith) { %>
+                                        <tr>
+                                            <td><strong>Bandwidth</strong></td>
+                                            <td><%= product.bandwith %></td>
+                                        </tr>
+                                    <% } %>
+                                    <tr>
+                                        <td><strong>Tax</strong></td>
+                                        <td>Rp 0,-</td>
+                                    </tr>
+                                    <tr class="table-warning">
+                                        <td><strong>Unique Code Discount</strong></td>
+                                        <td><strong>- Rp <%= Number(diskonUnik).toLocaleString('id-ID') %>,-</strong></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+</div>
+
+<%- include('../partials/user_footer') %>

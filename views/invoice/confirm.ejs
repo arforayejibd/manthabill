@@ -1,0 +1,151 @@
+<%- include('../partials/user_header') %>
+
+<%- include('../partials/user_navbar') %>
+<%- include('../partials/user_sidebar') %>
+
+<div class="content-wrapper">
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1>Confirmation</h1>
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="/Member">Home</a></li>
+                        <li class="breadcrumb-item"><a href="/Invoice">Invoice</a></li>
+                        <li class="breadcrumb-item active">Confirm Payment</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card card-dark">
+                        <div class="card-header">
+                            <h3 class="card-title">Payment Confirmation</h3>
+                        </div>
+                        <div class="card-body">
+                            <% if (pesan) { %>
+                                <%- pesan %>
+                            <% } %>
+
+                            <% if (errors && errors.length > 0) { %>
+                                <div class="alert alert-danger" role="alert">
+                                    <ul class="mb-0">
+                                        <% errors.forEach(function(error) { %>
+                                            <li><%= error %></li>
+                                        <% }); %>
+                                    </ul>
+                                </div>
+                            <% } %>
+
+                            <form action="/Invoice/konfirmasi/<%= encrypted %>" method="POST" enctype="multipart/form-data">
+                                <div class="row">
+                                    <div class="col-md-4">
+
+                                        <div class="form-group">
+                                            <label>Invoice Number <span class="text-danger">*</span></label>
+                                            <input
+                                                type="text"
+                                                name="nomorInvoice"
+                                                class="form-control"
+                                                value="<%= invoice.no_invoice.toUpperCase() %>"
+                                                readonly
+                                            >
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label>Transfer Amount <span class="text-danger">*</span></label>
+                                            <input
+                                                type="number"
+                                                name="jmlTransfer"
+                                                class="form-control"
+                                                value="<%= typeof oldJmlTransfer !== 'undefined' ? oldJmlTransfer : invoice.total_jumlah %>"
+                                                required
+                                            >
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label>Transfer Date <span class="text-danger">*</span></label>
+                                            <input
+                                                type="date"
+                                                name="tanggal"
+                                                class="form-control"
+                                                value="<%= typeof oldTanggal !== 'undefined' ? oldTanggal : new Date().toISOString().split('T')[0] %>"
+                                                required
+                                            >
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label>Sender Name <span class="text-danger">*</span></label>
+                                            <input
+                                                type="text"
+                                                name="namaPengirim"
+                                                class="form-control"
+                                                placeholder="Full Name"
+                                                maxlength="100"
+                                                value="<%= typeof oldNamaPengirim !== 'undefined' ? oldNamaPengirim : ((userDetail && userDetail.nama_depan) ? (userDetail.nama_depan + ' ' + (userDetail.nama_belakang || '')).trim() : '') %>"
+                                                required
+                                            >
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label>Sender Bank Name <span class="text-danger">*</span></label>
+                                            <input
+                                                type="text"
+                                                name="namaBank"
+                                                class="form-control"
+                                                placeholder="e.g. Bank BCA / Mandiri"
+                                                maxlength="50"
+                                                value="<%= typeof oldNamaBank !== 'undefined' ? oldNamaBank : '' %>"
+                                                required
+                                            >
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label>Transfer Proof (Receipt)</label>
+                                            <input
+                                                type="file"
+                                                name="bukti"
+                                                class="form-control-file"
+                                                accept=".jpg,.jpeg,.png,.pdf"
+                                            >
+                                            <small class="text-muted">Format: JPG, JPEG, PNG, PDF. Max. 2MB</small>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <button type="submit" class="btn btn-primary">Submit</button>
+                                            <a href="/Invoice" class="btn btn-danger">Cancel</a>
+                                        </div>
+
+                                    </div>
+
+                                    <div class="col-md-8">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="alert alert-dark">
+                                                    <h3>Attention:</h3><br>
+                                                    <p>Please make sure you have actually transferred to our bank account before sending confirmation. This will speed up the payment verification process.</p>
+                                                    <br>
+                                                    <p>If you need any assistance, feel free to contact us via our support tickets page.</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+<%- include('../partials/user_footer') %>
